@@ -14,24 +14,15 @@
         <material name="robot0:torso_mat" shininess="0.03" specular="0.4" reflectance="0"></material>
         <material name="robot0:base_mat" shininess="0.03" specular="0.4" reflectance="0"></material>
 
-        <mesh file="dummy.stl" name="robot0:base_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:bellows_link"></mesh>
+        <mesh file="mz07_base.stl" name="robot0:base_link"></mesh>
         <mesh file="mz07_link3.stl" name="robot0:elbow_flex_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:estop_link"></mesh>
         <mesh file="mz07_link4.stl" name="robot0:forearm_roll_link"></mesh>
         <mesh file="gripper_link.stl" name="robot0:gripper_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:head_pan_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:head_tilt_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:l_wheel_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:laser_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:r_wheel_link"></mesh>
         <mesh file="mz07_base.stl" name="robot0:torso_lift_link"></mesh>
         <mesh file="mz07_link1.stl" name="robot0:shoulder_pan_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:shoulder_lift_link"></mesh>
         <mesh file="mz07_link2.stl" name="robot0:upperarm_roll_link"></mesh>
         <mesh file="mz07_link5.stl" name="robot0:wrist_flex_link"></mesh>
         <mesh file="mz07_link6.stl" name="robot0:wrist_roll_link"></mesh>
-        <mesh file="dummy.stl" name="robot0:torso_fixed_link"></mesh>
     </asset>
 
     <equality>
@@ -40,8 +31,6 @@
 
     <contact>
         <exclude body1="robot0:r_gripper_finger_link" body2="robot0:l_gripper_finger_link"></exclude>
-        <exclude body1="robot0:torso_lift_link" body2="robot0:torso_fixed_link"></exclude>
-        <exclude body1="robot0:torso_lift_link" body2="robot0:shoulder_pan_link"></exclude>
     </contact>
 
     <default>
