@@ -1,19 +1,21 @@
 import os
 import pybullet_envs.bullet.kuka as kuka
 import pybullet as p
+import numpy as np
+import math
+import pybullet_data
 
 class Mz07(kuka.Kuka):
 
     def reset(self):
+
         objects = p.loadSDF(os.path.join(self.urdfRootPath, "mz07_with_gripper.sdf"))
         self.kukaUid = objects[0]
-        #for i in range (p.getNumJoints(self.kukaUid)):
-        #  print(p.getJointInfo(self.kukaUid,i))
         p.resetBasePositionAndOrientation(self.kukaUid, [-0.100000, 0.000000, 0.070000],
                                           [0.000000, 0.000000, 0.000000, 1.000000])
         self.jointPositions = [
-            0.006418, 0.413184, -0.011401, -1.589317, 0.005379, 1.137684, -0.006539, 0.000048,
-            -0.299912, 0.000000, -0.000043, 0.299960, 0.000000, -0.000200
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0
         ]
         self.numJoints = p.getNumJoints(self.kukaUid)
         for jointIndex in range(self.numJoints):
@@ -36,7 +38,15 @@ class Mz07(kuka.Kuka):
           jointInfo = p.getJointInfo(self.kukaUid, i)
           qIndex = jointInfo[3]
           if qIndex > -1:
-            #print("motorname")
-            #print(jointInfo[1])
             self.motorNames.append(str(jointInfo[1]))
             self.motorIndices.append(i)
+
+    def applyAction(self, jointPoses):
+
+        if (self.useSimulation):
+            for i in range(self.kukaEndEffectorIndex + 1):
+                p.setJointMotorControl2(self.kukaUid,
+                                      i,
+                                      p.POSITION_CONTROL,
+                                      targetPosition=jointPoses[i],
+                                      force=self.maxForce)
