@@ -21,14 +21,15 @@ if __name__=="__main__":
 
     for episode in range(100):
 
-        env.reset()
+        if episode>0:
+            env.reset()
 
         joints=[0,0,0]
         step=0
         jointPoses=[0 for i in range(12)]
         done=False
         total=0
-        gripperState = p.getLinkState(env._kuka.kukaUid, env._kuka.kukaGripperIndex)
+        gripperState = p.getLinkState(env._robot.robotUid, env._robot.endEffectorIndex)
         gripperPos = gripperState[0]
 
         while not done:
@@ -49,9 +50,9 @@ if __name__=="__main__":
             jointPoses[1]=joints[1]/180*3.14
             jointPoses[2]=joints[2]/180*3.14
             env.step(jointPoses)
-            # print(p.getJointState(env._kuka.kukaUid,6))
+            # print(p.getJointState(env._robot.kukaUid,6))
 
-            gripperState = p.getLinkState(env._kuka.kukaUid, 6)
+            gripperState = p.getLinkState(env._robot.robotUid, env._robot.endEffectorIndex)
             pos = gripperState[0]
             len=np.linalg.norm(np.array(pos)-np.array(gripperPos))
             gripperPos=pos
