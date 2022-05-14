@@ -102,8 +102,8 @@ class Mz07GymEnv():
             if self._termination():
                 break
             self._envStepCounter += 1
-        if self._renders:
-            time.sleep(self._timeStep)
+        # if self._renders:
+        #     time.sleep(self._timeStep)
         self._observation = self.getExtendedObservation()
 
         done = self._termination()

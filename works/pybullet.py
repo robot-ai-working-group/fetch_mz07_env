@@ -5,6 +5,7 @@ from pybullet_envs.bullet.kukaGymEnv import KukaGymEnv
 import time
 import pybullet as p
 import random
+import matplotlib.pyplot as plt
 
 rootdir=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -13,16 +14,23 @@ sys.path.append(rootdir)
 from envs.pybullet_mz07_env import Mz07GymEnv
 from algorithms.q_learning import *
 
+def encode_pos(joints):
+    obs=joints[0]+joints[1]*91+joints[2]*91*31
+    return obs
+
 if __name__=="__main__":
 
     q_table = np.zeros((91*31*31, 2*2*2))
     ql=q_learning(q_table)
     env = Mz07GymEnv()
 
-    for episode in range(100):
+    fig, ax = plt.subplots(1,1)
+    len_list=[]
+    lines, = ax.plot([0],[0])
 
-        if episode>0:
-            env.reset()
+    for episode in range(1,501):
+
+        env.reset()
 
         joints=[0,0,0]
         step=0
@@ -61,14 +69,23 @@ if __name__=="__main__":
             if (joints[0]==90 and joints[1]==30 and joints[2]==30):
                 done=True
 
-            reward=-100
+            reward=-10
             if done:
                 reward=-total
 
             # print("step: ",step, joints, done, len)
-            last_obs=last_joints[0]+last_joints[1]*90+last_joints[2]*90*30
-            obs=joints[0]+joints[1]*90+joints[2]*90*30
+            last_obs=encode_pos(last_joints)
+            obs=encode_pos(joints)
+            print("action:{},last_obs:{}, obs:{}".format(action,last_obs,obs),end="\r")
             ql.update_q_table(action, last_obs, obs, reward)
 
         print("done:", episode, "len:", total)
-        time.sleep(10)
+
+        len_list.append(total)
+        x=[i for i in range(1,episode+1)]
+        lines.set_data(x,len_list)
+        ax.set_xlim((1,episode))
+        ax.set_ylim((0,1.5))
+        plt.pause(.01)
+
+    print(len_list)
